@@ -1,8 +1,11 @@
 const fs = require('fs');
 const readline = require('readline');
 
+function getTimestamp() {
+  return new Date().toISOString().replace('T', ' ').replace('Z', '');
+}
 async function compareLogs(file1, file2) {
-  console.log(`Comparing files: ${file1} vs ${file2}`); // 添加此行来打印正在比较的文件名
+  console.log(`${getTimestamp()} Comparing files: ${file1} vs ${file2}`); // 添加此行来打印正在比较的文件名
 
   const stream1 = fs.createReadStream(file1);
   const stream2 = fs.createReadStream(file2);
@@ -55,7 +58,7 @@ async function compareLogs(file1, file2) {
     }
 
     if (match1[2] !== match2[2]) {
-      console.log(`Mismatch found in block number: ${match1[1]} at line ${lineCount} | ${file1} cycles: ${match1[2]} | ${file2} cycles: ${match2[2]}`);
+      console.log(`${getTimestamp()} Mismatch found in block number: ${match1[1]} at line ${lineCount} | ${file1} cycles: ${match1[2]} | ${file2} cycles: ${match2[2]}`);
       allMatch = false;
     }
 
@@ -66,7 +69,7 @@ async function compareLogs(file1, file2) {
   rl2.close();
 
   if (allMatch) {
-    console.log("All cycles match");
+    console.log(`${getTimestamp()} All cycles match`);
   }
 }
 
