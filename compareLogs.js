@@ -2,8 +2,26 @@ const fs = require('fs');
 const readline = require('readline');
 
 function getTimestamp() {
-  return new Date().toISOString().replace('T', ' ').replace('Z', '');
+  const date = new Date();
+
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+    timeZone: 'Asia/Shanghai'
+  });
+
+  let formattedDate = formatter.format(date);
+  formattedDate = formattedDate.replace(/(\d{2})\/(\d{2})\/(\d{4}), (\d{2}):(\d{2}):(\d{2})/, `$3-$1-$2 $4:$5:$6`);
+
+  const milliseconds = String(date.getMilliseconds()).padStart(3, '0');
+  return `${formattedDate}.${milliseconds}`;
 }
+
 async function compareLogs(file1, file2) {
   console.log(`${getTimestamp()} Comparing files: ${file1} vs ${file2}`); // 添加此行来打印正在比较的文件名
 
